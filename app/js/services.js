@@ -4,15 +4,24 @@ var services = angular.module("services", []);
 // Demo 1
 services.factory("Demo1Factory", 
 	function() {
-		var objs = [];
-
 		return {
 			get: function(n) {
-				objs = []
-				for (var i = 0; i < n; i++) {
-					objs.push(this._make("Demo Object "+i, "This is the description for Demo Object "+i));
+				if (i < 1) {
+					return;
 				}
-				return objs;
+
+				var arr = [];
+				for (var i = 0; i < n; i++) {
+					var obj = this._make("Demo Object", "This is the description for Demo Object"); 
+
+					if (n == 1) {
+						return obj;
+					}
+					
+					arr.push(obj);
+				}
+
+				return arr;
 			},
 			_make : function(name, description) {
 				return {

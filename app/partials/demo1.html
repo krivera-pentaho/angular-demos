@@ -1,9 +1,11 @@
-<div class="well">
+<link href="css/demo1.css" rel="stylesheet" type="text/css" />
+
+<div>
 	<h1>Ng-Repeat Demo w/ Factory</h1>
 	<button class="btn btn-success" ng-click="addClick()">Add</button>
 	<button class="btn btn-danger" ng-click="removeClick()">Remove</button>
 
-	<div ng-repeat="obj in objects" class="well">
+	<div ng-repeat="obj in objects" class="well repeat-item">
 		<h4>{{obj.name}}</h4>
 		<div>{{obj.description}}</div>
 	</div>
