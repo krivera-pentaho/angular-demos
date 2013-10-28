@@ -21,3 +21,11 @@ app.config(['$routeProvider',
 				redirectTo: '/'
 			})
 	}]);
+
+$(window).on("hashchange", function () {
+	$(".slide-item").removeClass("in").addClass("out");
+});
+
+$(".demo-buttons .btn").on("click", function() {
+	$(".slide-item").removeClass("out").addClass("in");
+})

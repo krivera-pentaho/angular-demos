@@ -1,33 +1,77 @@
 .view-wrapper {
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .slide-item {
   position: relative;
   display: inline-block;
-  vertical-align: top;
+  vertical-align: top;  
 }
 
 .slide-item.ng-enter,
 .slide-item.ng-leave {
-  -webkit-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
-  -moz-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
-  -ms-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
-  -o-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
-  transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+  -webkit-transition: 500ms;
+  -moz-transition: 500ms;
+  -ms-transition: 500ms;
+  -o-transition: 500ms;
+  transition: 500ms;
 }
 
-.slide-item.ng-enter {  
+/*
+ * SLIDE IN
+ */
+
+ /* Start Enter to the right */
+.slide-item.in.ng-enter {  
   left: 100%;
 }
 
-.slide-item.ng-enter.ng-enter-active,
-.slide-item.ng-leave {
+/* Finish Enter at left 0 */
+.slide-item.in.ng-enter.ng-enter-active {
+  left: 0;   
+}
+
+/* Start leave */
+.slide-item.in.ng-leave {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
+/* End Leave at the bottom */
+.slide-item.in.ng-leave.ng-leave-active {
+  top: 100%;
+  opacity: 0;
+}
+
+/*
+ * SLIDE OUT
+ */
+
+/* Start enter from bottom */
+.slide-item.out.ng-enter {
+  position: relative;
+  top: 1000px;  
+  /*left: 20px;*/
+}
+
+/* Finish Enter at left 0 */
+.slide-item.out.ng-enter.ng-enter-active {
+  /*position: relative;*/
+  left: 0px;
+  top: 0px;
+}
+
+/* Start leave */
+.slide-item.out.ng-leave {
+  position: absolute;
   left: 0;
 }
 
-.slide-item.ng-leave.ng-leave-active {
-  left: -100%;
+/* End Leave at the bottom */
+.slide-item.out.ng-leave.ng-leave-active {
+  left: 100%;
+  opacity: 0;
 }
 
 body {
