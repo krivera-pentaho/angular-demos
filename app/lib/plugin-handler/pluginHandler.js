@@ -12,18 +12,27 @@ var PluginHandler = (function() {
 	var PLUGIN_TYPE = "PLUGIN";
 
 	// Define Plugin Object
-	var Plugin = function(onRegisterCall, onUnregisterCall) {
-		var self = this;
+	var Plugin = function(onRegister, onUnregister) {		
 		this.id = _guid();
 		this.type = PLUGIN_TYPE;
+		this.register = function() {
+			register.call(this, this);
+		}
+		this.unregister = function() {
+			unregister.call(this, this);
+		}
 		this.onRegister = function() {
-			if (onRegisterCall) onRegisterCall.call(self);
+			if (onRegister) {
+				onRegister.call(this, this);
+			}
 		}
 		this.onUnregister = function() {
-			if (onUnregisterCall) onUnregisterCall.call(self);
+			if (onUnregister) {
+				onUnregister.call(this, this);
+			}
 		}
 		this.toString = function() {
-			return self.type + "[" + self.id + "]";
+			return this.type + "[" + this.id + "]";
 		}
 	}
 
@@ -36,7 +45,7 @@ var PluginHandler = (function() {
 	}
 
 	// Verifies if the plugin is a hard type
-	var _verifyPlugin = function(plugin) {
+	var _verifyPlugin = function(plugin) {		
 		if (!plugin.type || plugin.type != PLUGIN_TYPE) {
 			_throwExcpetion("Incompatible object Exception");
 		}
@@ -48,42 +57,53 @@ var PluginHandler = (function() {
 		throw msg;
 	}
 
+	// Register a single plugin
+	var register = function(plugin) {
+		_verifyPlugin(plugin);
+
+		if (plugins[plugin.id]) {
+			_throwExcpetion("WARNING: " + plugin + "already registered");
+			return;
+		}
+
+		plugins[plugin.id] = plugin;		
+
+		if (!plugins[plugin.id]) {
+			_throwExcpetion(plugin + " was not added successfully");
+		}
+		console.log(plugin + " has been registered");
+		plugin.onRegister.call(plugin);
+	}
+
+	// Unregister a single plugin
+	var unregister = function(plugin) {
+		_verifyPlugin(plugin);
+
+		unregisterById(plugin.id)
+	}
+
+	// Unregisters a singly plugin by its id
+	var unregisterById = function(id) {
+		// Verify that plugin is present in list of plugins
+		if (!plugins[id]) {
+			_throwExcpetion(plugin + " does not exist");				
+		}
+
+		var plugin = plugins[id];
+		delete plugins[id];
+		
+		// Verify that plugin was successfully removed
+		if (plugins[id]) {
+			_throwExcpetion(plugin + " was not removed successfully");
+		}
+
+		plugin.onUnregister.call(plugin);
+	}
+
 	return {
 		Plugin : Plugin,
-
-		register : function(plugin) {
-			_verifyPlugin(plugin);
-
-			plugins[plugin.id] = plugin;		
-
-			if (!plugins[plugin.id]) {
-				_throwExcpetion(plugin + " was not added successfully");
-			}
-
-			plugin.onRegister();
-		}, 
-
-		unregister : function(plugin) {
-			_verifyPlugin(plugin);
-
-			this.unregisterById(plugin.id)
-		},
-
-		unregisterById : function(id) {
-			// Verify that plugin is present in list of plugins
-			if (!plugins[id]) {
-				_throwExcpetion(plugin + " does not exist");				
-			}
-
-			var plugin = plugins[id];
-			delete plugins[id];
-			
-			// Verify that plugin was successfully removed
-			if (plugins[id]) {
-				_throwExcpetion(plugin + " was not removed successfully");
-			}
-
-			plugin.onUnregister();
-		}
+		register : register, 
+		unregister : unregister,
+		unregisterById : unregisterById
 	}	
 })();
