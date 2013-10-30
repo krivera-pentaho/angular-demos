@@ -113,11 +113,11 @@ var AngularPluginHandler = (function() {
 	var makePluggable = function(module) {
 		module.config(['$routeProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide',
 			function ($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
-				app.controllerProvider = $controllerProvider;
-		        app.compileProvider    = $compileProvider;
-		        app.routeProvider      = $routeProvider;
-		        app.filterProvider     = $filterProvider;
-		        app.provide            = $provide;
+				module.controllerProvider = $controllerProvider;
+		        module.compileProvider    = $compileProvider;
+		        module.routeProvider      = $routeProvider;
+		        module.filterProvider     = $filterProvider;
+		        module.provide            = $provide;
 		    }]);
 	}
 
