@@ -50,12 +50,18 @@ var Demo1 = (function() {
 		}					
 	};
 
+	var route = {
+		url : '/demo1',
+		templateUrl : 'partials/demo1.html',
+		controller : controller.name
+	}
+
 	$(document).ready(function() {
 		$("#register-demo1").on("click", Demo1.registerPlugin);
 		$("#unregister-demo1").on("click", Demo1.unregisterPlugin);
 	});
 
-	var angularPlugin = new DemoAppPluginHandler.DemoAppPlugin('NgRepeat Demo','angular-demo-app', '/demo1', 'partials/demo1.html', controller, service);
+	var angularPlugin = new DemoAppPluginHandler.DemoAppPlugin('NgRepeat Demo', '/demo1', 'angular-demo-app', route, controller, service);
 
 	return {
 		registerPlugin : function() {

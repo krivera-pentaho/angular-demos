@@ -19,17 +19,20 @@
  *			// APPLICATION CONFIGURATION //
  *			///////////////////////////////
  *		}]);
+ * 
+ * EXAMPLE Route 		{ url : 'String', templateUrl : 'String', controller : 'String' }
+ * EXAMPLE Controller 	{ name : 'String', def : 'Function or Array' }
+ * EXAMPLE Service 		{ name : 'String', def : 'Function or Array' }
  */
 
 var AngularPluginHandler = (function() {
 
 	// Define an extended plugin of PluginHandler.Plugin
-	var AngularPlugin = function(moduleName, routeUrl, templateUrl, controller, service, onRegister, onUnregister) {		
+	var AngularPlugin = function(moduleName, route, controller, service, onRegister, onUnregister) {		
 		$.extend(this, new PluginHandler.Plugin(_onRegister, _onUnregister));		
 
-		this.moduleName = moduleName;
-		this.routeUrl = routeUrl;
-		this.templateUrl = templateUrl;
+		this.moduleName = moduleName;		
+		this.route = route;
 		this.controller = controller;
 		this.service = service;
 
@@ -60,18 +63,24 @@ var AngularPluginHandler = (function() {
 		// Retrieve module
 		var module = angular.module(plugin.moduleName);
 
-		// Create controller
-		module.controllerProvider.register(plugin.controller.name, plugin.controller.def);
+		// Create controllers
+		$(plugin.controller).each(function(i, controller) {
+			module.controllerProvider.register(controller.name, controller.def);	
+		});		
 
-		// Create Service
-		module.provide.service(plugin.service.name, plugin.service.def);
+		// Create Services
+		$(plugin.service).each(function(i, service) {
+			module.provide.service(service.name, service.def);	
+		});
 		
-		// Append route
-		module.routeProvider
-			.when(plugin.routeUrl, {
-				templateUrl : plugin.templateUrl,
-				controller : plugin.controller.name
-			});			
+		// Append routes
+		$(plugin.route).each(function(i, route) {
+			module.routeProvider
+				.when(route.url, {
+					templateUrl : route.templateUrl,
+					controller : route.controller
+				});				
+		});		
 	}
 
 	// Provide function for onUnregister
@@ -79,23 +88,29 @@ var AngularPluginHandler = (function() {
 		// Retrieve module
 		var module = angular.module(plugin.moduleName);
 
-		// Unbind Controller
-		module.controllerProvider.register(plugin.controller.name, null);
+		// Unbind Controllers
+		$(plugin.controller).each(function(i, controller) {
+			module.controllerProvider.register(controller.name, null);
+		})
 
-		// Unbind Service
-		module.provide.service(plugin.service.name, null);
+		// Unbind Services
+		$(plugin.service).each(function(i, service) {
+			module.provide.service(service.name, null);
+		})
 		
-		// Append route
-		module.routeProvider
-			.when(plugin.routeUrl, {
-				// TODO : find way to retrieve default location of otherwise binding
-				redirectTo : "/"				
+		// Unbind routes
+		$(plugin.route).each(function(i, route) {
+			module.routeProvider
+				.when(route.url, {
+					// TODO : find way to retrieve default location of otherwise binding
+					redirectTo : "/"				
+				});
 			});
 	}
 
 	// This attaches the appropriate methods and objects directly to the module to allow the module
 	// to be pluggable later
-	var makeModulePluggable = function(module) {
+	var makePluggable = function(module) {
 		module.config(['$routeProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide',
 			function ($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
 				app.controllerProvider = $controllerProvider;
@@ -108,7 +123,7 @@ var AngularPluginHandler = (function() {
 
 	return {
 		AngularPlugin : AngularPlugin,
-		makeModulePluggable : makeModulePluggable
+		makePluggable : makePluggable
 	}
 })();
 

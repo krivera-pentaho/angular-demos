@@ -2,7 +2,8 @@
 /* App Definiton */
 var app = angular.module('angular-demo-app', ['ngRoute', 'ngAnimate', 'controllers']);
 
-AngularPluginHandler.makeModulePluggable(app);
+// Used to make the module pluggable via the AngularPluginHandler framework
+AngularPluginHandler.makePluggable(app);
 
 app.config(['$routeProvider',
 	function ($routeProvider) {
