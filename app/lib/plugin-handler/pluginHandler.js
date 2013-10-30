@@ -62,7 +62,7 @@ var PluginHandler = (function() {
 		_verifyPlugin(plugin);
 
 		if (plugins[plugin.id]) {
-			_throwExcpetion("WARNING: " + plugin + "already registered");
+			_throwExcpetion("WARNING: " + plugin + " is already registered");
 			return;
 		}
 
@@ -79,6 +79,10 @@ var PluginHandler = (function() {
 	var unregister = function(plugin) {
 		_verifyPlugin(plugin);
 
+		if (!plugins[plugin.id]) {
+			_throwExcpetion(plugin + " is not registered");
+		}
+
 		unregisterById(plugin.id)
 	}
 
@@ -86,7 +90,7 @@ var PluginHandler = (function() {
 	var unregisterById = function(id) {
 		// Verify that plugin is present in list of plugins
 		if (!plugins[id]) {
-			_throwExcpetion(plugin + " does not exist");				
+			_throwExcpetion("Plugin by id '" + id + "' is not registered");				
 		}
 
 		var plugin = plugins[id];

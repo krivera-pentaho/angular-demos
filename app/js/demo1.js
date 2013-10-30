@@ -1,4 +1,4 @@
-var demo1 = (function() {
+var Demo1 = (function() {
 
 	// Define Controller
 	var controller = {
@@ -50,6 +50,19 @@ var demo1 = (function() {
 		}					
 	};
 
-	var angularPlugin = new AngularPluginHandler.AngularPlugin('angular-demo-app', '/demo1', 'partials/demo1.html', controller, service);
-	angularPlugin.register();
+	$(document).ready(function() {
+		$("#register-demo1").on("click", Demo1.registerPlugin);
+		$("#unregister-demo1").on("click", Demo1.unregisterPlugin);
+	});
+
+	var angularPlugin = new DemoAppPluginHandler.DemoAppPlugin('NgRepeat Demo','angular-demo-app', '/demo1', 'partials/demo1.html', controller, service);
+
+	return {
+		registerPlugin : function() {
+			angularPlugin.register();
+		},
+		unregisterPlugin : function() {
+			angularPlugin.unregister();
+		}
+	}	
 })();

@@ -17,6 +17,7 @@
 		<link href="css/app.css" rel="stylesheet" type="text/css" />
 
 		<!-- Main app -->
+		<script type="text/javascript" src="js/DemoAppPluginHandler.js"></script>
 		<script type="text/javascript" src="js/app.js"></script>
 		<script type="text/javascript" src="js/controllers.js"></script>
 		<script type="text/javascript" src="js/services.js"></script>
@@ -29,11 +30,12 @@
 			<h1>Angular Demos</h1>
 		</div>
 		<div class="row">
+			<button id="register-demo1" class="btn btn-default">Register NgRepeat Demo Plugin</button>
+			<button id="unregister-demo1" class="btn btn-default">Unregister NgRepeat Demo Plugin</button>
+		</div>
+		<div class="row">
 			<div class="col-md-2 well demo-buttons">
-				<ul>
-					<li>
-						<a href="#/demo1"><button class="btn btn-default">NgRepeat Demo</button></a>
-					</li>
+				<ul id="demo-buttons">					
 					<li>
 						<a href="#/demo2"><button class="btn btn-default">Filter Demo</button></a>
 					</li>
@@ -43,6 +45,7 @@
 				</ul>
 			</div>
 			<div class="col-md-10 view-wrapper well">
+				
 				<div ng-view class="slide-item in"></div>
 			</div>
 		</div>	
