@@ -3,8 +3,8 @@
  */
 var DemoAppPluginHandler = (function(){
 
-	var DemoAppPlugin = function(pluginName, startRouteUrl, moduleName, route, controller, service) {
-		$.extend(this, new AngularPluginHandler.AngularPlugin(moduleName, route, controller, service, _onRegister, _onUnregister));
+	var DemoAppPlugin = function(pluginName, startRouteUrl, moduleName, routes, controllers, services) {
+		$.extend(this, new AngularPluginHandler.AngularPlugin(moduleName, routes, controllers, services, _onRegister, _onUnregister));
 
 		this.pluginName = pluginName;
 		this.startRouteUrl = startRouteUrl;
@@ -21,7 +21,15 @@ var DemoAppPluginHandler = (function(){
 	var _onUnregister = function(plugin) {
 		plugin.linkButton.remove();
 
-		// TODO : clean up view area
+		var module = angular.module(plugin.moduleName);
+
+		var hashUrl = module.$location.path();
+		$(plugin.routes).each(function(i, route) {
+			if (hashUrl == route.url) {
+				window.history.back();				
+				return false;
+			}
+		});
 	}
 
 	return {

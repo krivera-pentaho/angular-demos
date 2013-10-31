@@ -23,18 +23,20 @@
  * EXAMPLE Route 		{ url : 'String', templateUrl : 'String', controller : 'String' }
  * EXAMPLE Controller 	{ name : 'String', def : 'Function or Array' }
  * EXAMPLE Service 		{ name : 'String', def : 'Function or Array' }
+ *
+ * Route, Controller, and Service can be an array of their respective objects
  */
 
 var AngularPluginHandler = (function() {
 
 	// Define an extended plugin of PluginHandler.Plugin
-	var AngularPlugin = function(moduleName, route, controller, service, onRegister, onUnregister) {		
+	var AngularPlugin = function(moduleName, routes, controllers, services, onRegister, onUnregister) {		
 		$.extend(this, new PluginHandler.Plugin(_onRegister, _onUnregister));		
 
 		this.moduleName = moduleName;		
-		this.route = route;
-		this.controller = controller;
-		this.service = service;
+		this.routes = routes;
+		this.controllers = controllers;
+		this.services = services;
 
 		// Need to wrap base implementation of onRegister to allow for an additional onRegister
 		var baseOnRegister = this.onRegister;
@@ -64,18 +66,18 @@ var AngularPluginHandler = (function() {
 		var module = angular.module(plugin.moduleName);
 
 		// Create controllers
-		$(plugin.controller).each(function(i, controller) {
-			module.controllerProvider.register(controller.name, controller.def);	
+		$(plugin.controllers).each(function(i, controller) {
+			module.$controllerProvider.register(controller.name, controller.def);	
 		});		
 
 		// Create Services
-		$(plugin.service).each(function(i, service) {
-			module.provide.service(service.name, service.def);	
+		$(plugin.services).each(function(i, service) {
+			module.$provide.service(service.name, service.def);	
 		});
 		
 		// Append routes
-		$(plugin.route).each(function(i, route) {
-			module.routeProvider
+		$(plugin.routes).each(function(i, route) {
+			module.$routeProvider
 				.when(route.url, {
 					templateUrl : route.templateUrl,
 					controller : route.controller
@@ -89,18 +91,18 @@ var AngularPluginHandler = (function() {
 		var module = angular.module(plugin.moduleName);
 
 		// Unbind Controllers
-		$(plugin.controller).each(function(i, controller) {
-			module.controllerProvider.register(controller.name, null);
+		$(plugin.controllers).each(function(i, controller) {
+			module.$controllerProvider.register(controller.name, null);
 		})
 
 		// Unbind Services
-		$(plugin.service).each(function(i, service) {
-			module.provide.service(service.name, null);
+		$(plugin.services).each(function(i, service) {
+			module.$provide.service(service.name, null);
 		})
 		
 		// Unbind routes
-		$(plugin.route).each(function(i, route) {
-			module.routeProvider
+		$(plugin.routes).each(function(i, route) {
+			module.$routeProvider
 				.when(route.url, {
 					// TODO : find way to retrieve default location of otherwise binding
 					redirectTo : "/"				
@@ -113,11 +115,11 @@ var AngularPluginHandler = (function() {
 	var makePluggable = function(module) {
 		module.config(['$routeProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide',
 			function ($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide) {
-				module.controllerProvider = $controllerProvider;
-		        module.compileProvider    = $compileProvider;
-		        module.routeProvider      = $routeProvider;
-		        module.filterProvider     = $filterProvider;
-		        module.provide            = $provide;
+				module.$controllerProvider = $controllerProvider;
+		        module.$compileProvider    = $compileProvider;
+		        module.$routeProvider      = $routeProvider;
+		        module.$filterProvider     = $filterProvider;
+		        module.$provide            = $provide;
 		    }]);
 	}
 

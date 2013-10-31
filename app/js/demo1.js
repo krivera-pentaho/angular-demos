@@ -1,22 +1,27 @@
 var Demo1 = (function() {
 
+	var controllerDef = [ "$scope", "Demo1Factory",
+		function($scope, Demo1Factory) {
+			$scope.objects = Demo1Factory.get(3);
+
+			$scope.addClick = function() {
+
+				$scope.objects.push(Demo1Factory.get(1));
+			}
+
+			$scope.removeClick = function() {
+					$scope.objects.pop();		
+			}
+		}];
+
 	// Define Controller
-	var controller = {
+	var controller = [{
 		name : "Demo1Controller",
-		def : [ "$scope", "Demo1Factory",
-			function($scope, Demo1Factory) {
-				$scope.objects = Demo1Factory.get(3);
-
-				$scope.addClick = function() {
-
-					$scope.objects.push(Demo1Factory.get(1));
-				}
-
-				$scope.removeClick = function() {
-						$scope.objects.pop();		
-				}
-			}]
-	};
+		def : controllerDef
+	}, {
+		name : "Demo4Controller",
+		def : controllerDef
+	}];
 
 	// Define Service
 	var service = {		
@@ -30,10 +35,6 @@ var Demo1 = (function() {
 			}
 
 			this.get = function(n) {
-				if (n < 1) {
-					return;
-				}
-
 				var arr = [];
 				for (var i = 0; i < n; i++) {
 					var obj = _make("Demo Object", "This is the description for Demo Object"); 
@@ -50,11 +51,15 @@ var Demo1 = (function() {
 		}					
 	};
 
-	var route = {
+	var route = [{
 		url : '/demo1',
 		templateUrl : 'partials/demo1.html',
-		controller : controller.name
-	}
+		controller : "Demo1Controller"
+	}, {
+		url : '/demo4',
+		templateUrl : 'partials/demo1.html',
+		controller : "Demo4Controller"
+	}]
 
 	$(document).ready(function() {
 		$("#register-demo1").on("click", Demo1.registerPlugin);
