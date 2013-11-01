@@ -3,6 +3,9 @@
  * registering/unregistering the plugin's repsective methods are called. This is not 
  * intended to function on its own, but to be extended via a framework specific implementation 
  * of the plugin object
+ * 
+ * For a given plugin, the onRegister and onUnregister parameters can either be single functions
+ * or an array of functions, which can also be nested within arrays.
  */
 
 var PluginHandler = (function() {
@@ -22,18 +25,34 @@ var PluginHandler = (function() {
 			unregister.call(this, this);
 		}
 		this.onRegister = function() {
-			if (onRegister) {
-				onRegister.call(this, this);
-			}
+			_loopExec.call(this, onRegister);
 		}
 		this.onUnregister = function() {
-			if (onUnregister) {
-				onUnregister.call(this, this);
-			}
+			_loopExec.call(this, onUnregister);
 		}
 		this.toString = function() {
 			return this.type + "[" + this.id + "]";
 		}
+	}
+
+	// Loops over a single or array of functions and executes them
+	function _loopExec(obj) {
+		var isFunction = $.isFunction(obj);
+		if (!obj || (!isFunction && !(obj instanceof Array))) {
+			return;
+		}
+
+		// Immediately execute a single function
+		if (isFunction) {
+			obj.call(this, this);
+			return;
+		};
+
+		// Loop over functions and execute them
+		var self = this;
+		$(obj).each(function(i, func) {
+			_loopExec.call(self, func);
+		})
 	}
 
 	// Generates a guid for use with plugins

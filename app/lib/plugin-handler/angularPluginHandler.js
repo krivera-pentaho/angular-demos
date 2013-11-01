@@ -30,33 +30,13 @@
 var AngularPluginHandler = (function() {
 
 	// Define an extended plugin of PluginHandler.Plugin
-	var AngularPlugin = function(moduleName, routes, controllers, services, onRegister, onUnregister) {		
-		$.extend(this, new PluginHandler.Plugin(_onRegister, _onUnregister));		
+	var AngularPlugin = function(moduleName, routes, controllers, services, onRegister, onUnregister) {
+		$.extend(this, new PluginHandler.Plugin([_onRegister, onRegister], [_onUnregister, onUnregister]));		
 
 		this.moduleName = moduleName;		
 		this.routes = routes;
 		this.controllers = controllers;
 		this.services = services;
-
-		// Need to wrap base implementation of onRegister to allow for an additional onRegister
-		var baseOnRegister = this.onRegister;
-		this.onRegister = function() {
-			baseOnRegister.call(this, this);
-
-			if (onRegister) {
-				onRegister.call(this, this);
-			}
-		}
-
-		// Need to wrap base implementation of onUnregister to allow for an additional onUnregister
-		var baseOnUnregister = this.onUnregister;
-		this.onUnregister = function() {
-			baseOnUnregister.call(this, this);
-
-			if (onUnregister) {
-				onUnregister.call(this, this);
-			}
-		}
 	};
 
 	// Provide function for onRegister

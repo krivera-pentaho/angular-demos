@@ -8,7 +8,6 @@ module.controller("Demo2Controller", ["$scope", "Demo2Service",
 	}]);
 
 // Demo 3 Controller
-module.controller("Demo3Controller", ["$scope",
-	function($scope) {
+module.controller("Demo3Controller", ["$scope", function($scope) {}]);
 
-	}]);
+module.controller("Demo4Controller", ["$scope", function($scope) {}])

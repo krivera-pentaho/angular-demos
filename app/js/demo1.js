@@ -19,7 +19,7 @@ var Demo1 = (function() {
 		name : "Demo1Controller",
 		def : controllerDef
 	}, {
-		name : "Demo4Controller",
+		name : "Demo1_1Controller",
 		def : controllerDef
 	}];
 
@@ -56,9 +56,9 @@ var Demo1 = (function() {
 		templateUrl : 'partials/demo1.html',
 		controller : "Demo1Controller"
 	}, {
-		url : '/demo4',
+		url : '/demo1_1',
 		templateUrl : 'partials/demo1.html',
-		controller : "Demo4Controller"
+		controller : "Demo1_1Controller"
 	}]
 
 	$(document).ready(function() {

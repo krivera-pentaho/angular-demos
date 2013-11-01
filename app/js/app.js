@@ -16,6 +16,10 @@ app.config(['$routeProvider', '$locationProvider',
 				templateUrl : 'partials/demo3.html',
 				controller : 'Demo3Controller'
 			})
+			.when('/demo4', {
+				templateUrl : 'partials/demo4.html',
+				controller : 'Demo3Controller'
+			})
 			.otherwise({
 				redirectTo: '/'
 			});
@@ -42,7 +46,6 @@ app.config(['$routeProvider', '$locationProvider',
 	}]);
 
 var lastLocation = "";
-
 
 // $(window).on("hashchange", function () {
 // 	$(".slide-item").addClass("out").removeClass("in");
